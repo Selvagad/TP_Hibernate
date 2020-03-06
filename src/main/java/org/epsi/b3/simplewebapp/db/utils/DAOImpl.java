@@ -3,6 +3,9 @@ package org.epsi.b3.simplewebapp.db.utils;
 import org.epsi.b3.simplewebapp.products.Product;
 import org.hibernate.Transaction;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
+
 
 public class DAOImpl implements ProductDAO{
 	private SessionFactorySingleton sessionFactory;
@@ -31,13 +34,22 @@ public class DAOImpl implements ProductDAO{
 
 	@Override
 	public void deleteProduct(Product product) {
-		
+		final Transaction transaction = sessionFactory.getSessionFactory().getCurrentSession().beginTransaction();
+
+		try {
+			sessionFactory.getSessionFactory().getCurrentSession().delete(product);
+			transaction.commit();
+		} catch (RuntimeException e) {
+			transaction.rollback();
+		}
 		
 	}
 
 	@Override
-	public Iterable<Product> list() {
-		
+	public List<Product> list() {
+		final Transaction transaction = sessionFactory.getSessionFactory().getCurrentSession().beginTransaction();
+
+
 		return null;
 	}
 
